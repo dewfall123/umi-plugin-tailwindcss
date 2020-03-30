@@ -1,0 +1,48 @@
+{
+  "name": "umi-plugin-tailwindcss",
+  "version": "1.0.1",
+  "description": "umi@3.0 plugin for tailwindcss",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup --config"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dewfall123/umi-plugin-tailwindcss.git"
+  },
+  "keywords": [
+    "umi",
+    "plugin",
+    "tailwind",
+    "tailwindcss"
+  ],
+  "authors": [
+    "zfh"
+  ],
+  "license": "MIT",
+  "bugs": "https://github.com/dewfall123/umi-plugin-tailwindcss/issues",
+  "homepage": "https://github.com/dewfall123/umi-plugin-tailwindcss",
+  "peerDependencies": {
+    "umi": "3.x"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.0",
+    "tailwindcss": "^1.2.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "rollup": "^2.3.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-typescript2": "^0.27.0",
+    "typescript": "^3.8.3",
+    "umi": "3.0.14"
+  }
+}
