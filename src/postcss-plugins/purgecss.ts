@@ -14,6 +14,9 @@ const config = {
 };
 
 const plugin = postcss.plugin('tailwind-purgecss', (opts: any) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return () => {};
+  }
   const generatedFilePath = path.join(process.cwd(), 'src/.umi/tailwind.css');
   return (root, result) => {
     // 只对生成的tailwind.css 文件做purgecss处理 否则会影响antd的css
