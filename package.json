@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup --config"
+    "build": "rollup --config",
+    "public": "yarn build && npm version patch && npm publish"
   },
   "files": [
     "dist",
