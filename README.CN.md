@@ -2,26 +2,26 @@
 
 > umi-plugin-tailwindcss
 
-[中文文档](https://github.com/dewfall123/umi-plugin-tailwindcss/blob/master/README.md)
+## 安装
 
-## Install
-
-Using npm:
+通过 `npm` 安装:
 
 ```bash
 $ npm install umi-plugin-tailwindcss -D
 ```
 
-or using yarn:
+或者使用 `yarn`:
 
 ```bash
 $ yarn add umi-plugin-tailwindcss -D
 ```
 
-## Setup
+## 配置
+一般来说，不需要修改默认配置就可以使用，在非`local`环境，会启用`purgecss`插件，去除额外的`tailwindcss` 样式。
+
 ```ts
 // .umirc.ts
-// this is the default setting
+// 默认配置
 tailwindcss: {
     configName: 'tailwind.config.js',
     path: '', // eg @/assets/tailwind.css
@@ -36,7 +36,7 @@ tailwindcss: {
 
 - **configName**
   
-    If you use a name other than tailwind.config.js for the Tailwind config file, you will need to specify it in your `.umirc.ts` configuration.
+    如果你需要自定义tailwind配置文件名，你可以这样设置:
     ```js
     tailwindcss: {
         configName: 'myTailwind.config.js',
@@ -44,7 +44,7 @@ tailwindcss: {
     ```
 - **path**
   
-    If path is empty. this plugin will generate a file in `.umi` directory with the content:
+    path默认是空，会在`.umi`里面生成一个`tailwind.css`文件并自动import，内容如下:
     ```css
     /* purgecss start ignore */
     @tailwind base;
@@ -55,7 +55,7 @@ tailwindcss: {
     @tailwind utilities;
     ```
 
-    If you want to custom the tailwind.css file(eg: Adding Base Styles[https://tailwindcss.com/docs/adding-base-styles]), you can set the custom file path here.
+    如果你需要自定义`tailwind.css`文件的内容（例如[https://www.tailwindcss.cn/docs/adding-base-styles]），你可以设置`path`，值是文件路径。
     ```js
     // .umirc.ts
     tailwindcss: {
@@ -65,10 +65,8 @@ tailwindcss: {
 
 - **purgecssEnable**
   
-    Enable the `purgecss` if the value is true. Don't enable in the `dev` environment!!! Because it won't run `purgecss` again in the hot update mode.
+    是否开启`purgecss`。默认值是`process.env.UMI_ENV !== 'local'`，这意味着在`local`环境不会开启`purgecss`。也不要在`dev`模式开启这个选项!!! 因为热更新不会重新运行`purgecss`。
 
 - **purgecssOptions**
-  
-    By default Purgecss will look for css selectors in your .html and .ejs files inside the ./src directory and .ts(x) files inside the ./src directory.
 
-    Check https://www.purgecss.com/configuration#options for a list of available options.
+    详情见 https://www.purgecss.com/configuration#options .

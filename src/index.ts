@@ -11,7 +11,9 @@ export default (api: IApi) => {
       schema(joi) {
         return joi.object({
           configName: joi.string(),
+          purgecssEnable: joi.boolean(),
           purgecssOptions: joi.object(),
+          path: joi.string(),
         });
       },
     },
@@ -19,13 +21,24 @@ export default (api: IApi) => {
 
   // 添加postcss-plugin配置
   api.modifyConfig((config: IConfig) => {
-    const { configName, purgecssOptions } = api.userConfig.tailwindcss || {};
+    const {
+      configName,
+      purgecssOptions,
+      purgecssEnable = process.env.UMI_ENV !== 'local',
+      path,
+    } = api.userConfig.tailwindcss || {};
 
     config.extraPostCSSPlugins = [
       ...(config.extraPostCSSPlugins || []),
       configName ? tailwindcssPlugin(configName) : tailwindcssPlugin,
-      purgecssPlugin(purgecssOptions),
     ];
+
+    if (purgecssEnable) {
+      const purgePaths = path ? [path] : [];
+      config.extraPostCSSPlugins.push(
+        purgecssPlugin(purgePaths)(purgecssOptions),
+      );
+    }
     return config;
   });
 
@@ -39,15 +52,19 @@ export default (api: IApi) => {
 
   // 添加文件
   api.onGenerateFiles(() => {
-    api.writeTmpFile({
-      path: `tailwind.css`,
-      content: tailwindcssContent,
-    });
+    const { path } = api.userConfig.tailwindcss || {};
+    if (!path) {
+      api.writeTmpFile({
+        path: `tailwind.css`,
+        content: tailwindcssContent,
+      });
+    }
   });
 
   api.addEntryImportsAhead(() => {
+    const { path } = api.userConfig.tailwindcss || {};
     return {
-      source: './tailwind.css',
+      source: path || './tailwind.css',
     };
   });
 };

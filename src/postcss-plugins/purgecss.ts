@@ -13,19 +13,24 @@ const config = {
     content.match(/[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g) || [],
 };
 
-const plugin = postcss.plugin('tailwind-purgecss', (opts: any) => {
-  if (process.env.NODE_ENV !== 'production') {
-    return () => {};
-  }
-  const generatedFilePath = path.join(process.cwd(), 'src/.umi/tailwind.css');
-  return (root, result) => {
-    // 只对生成的tailwind.css 文件做purgecss处理 否则会影响antd的css
-    if (root.source && root.source.input.file === generatedFilePath) {
-      const fn = purgecss(Object.assign(config, opts));
-      return fn(root, result);
-    }
-    return () => {};
-  };
-});
-
-export default plugin;
+export default (paths: string[]) => {
+  const generatedFilePaths = [
+    ...paths.map((p: string) =>
+      path.join(process.cwd(), p.replace('@', './src')),
+    ),
+    path.join(process.cwd(), 'src/.umi/tailwind.css'),
+  ];
+  return postcss.plugin('tailwind-purgecss', (opts: any) => {
+    return (root, result) => {
+      // 只对生成的tailwind.css 文件做purgecss处理 否则会影响antd的css
+      if (
+        root.source &&
+        generatedFilePaths.includes(root.source.input.file as string)
+      ) {
+        const fn = purgecss(Object.assign(config, opts));
+        return fn(root, result);
+      }
+      return () => {};
+    };
+  });
+};

@@ -9,8 +9,7 @@
     "pre-public": "yarn build && npm version patch"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "repository": {
     "type": "git",
