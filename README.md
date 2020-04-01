@@ -2,7 +2,7 @@
 
 > umi-plugin-tailwindcss
 
-[中文文档](https://github.com/dewfall123/umi-plugin-tailwindcss/blob/master/README.md)
+[中文文档](https://github.com/dewfall123/umi-plugin-tailwindcss/blob/master/README.CN.md)
 
 ## Install
 
