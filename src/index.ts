@@ -1,8 +1,8 @@
 import { IApi, IConfig } from 'umi';
-import { tailwindcssContent } from './constants';
-import { dirname } from 'path';
+import { tailwindConfigJS, tailwindcssContent } from './constants';
+import { dirname, join } from 'path';
 import tailwindcssPlugin from './postcss-plugins/tailwindcss';
-import purgecssPlugin from './postcss-plugins/purgecss';
+import fs from 'fs';
 
 export default (api: IApi) => {
   api.describe({
@@ -10,10 +10,7 @@ export default (api: IApi) => {
     config: {
       schema(joi) {
         return joi.object({
-          configName: joi.string(),
-          purgecssEnable: joi.boolean(),
-          purgecssOptions: joi.object(),
-          path: joi.string(),
+          tailwindCssFilePath: joi.string(),
         });
       },
     },
@@ -21,24 +18,11 @@ export default (api: IApi) => {
 
   // 添加postcss-plugin配置
   api.modifyConfig((config: IConfig) => {
-    const {
-      configName,
-      purgecssOptions,
-      purgecssEnable = process.env.UMI_ENV !== 'local',
-      path,
-    } = api.userConfig.tailwindcss || {};
-
     config.extraPostCSSPlugins = [
       ...(config.extraPostCSSPlugins || []),
-      configName ? tailwindcssPlugin(configName) : tailwindcssPlugin,
+      tailwindcssPlugin,
     ];
 
-    if (purgecssEnable) {
-      const purgePaths = path ? [path] : [];
-      config.extraPostCSSPlugins.push(
-        purgecssPlugin(purgePaths)(purgecssOptions),
-      );
-    }
     return config;
   });
 
@@ -52,19 +36,26 @@ export default (api: IApi) => {
 
   // 添加文件
   api.onGenerateFiles(() => {
-    const { path } = api.userConfig.tailwindcss || {};
-    if (!path) {
+    const { tailwindCssFilePath } = api.userConfig.tailwindcss || {};
+    if (!tailwindCssFilePath) {
       api.writeTmpFile({
         path: `tailwind.css`,
         content: tailwindcssContent,
       });
     }
+
+    // 添加tailwind.config.js
+    const ConfigFile = join(api.cwd, 'tailwind.config.js');
+    if (!fs.existsSync(ConfigFile)) {
+      console.log('generate tailwind.config.js.');
+      fs.writeFileSync(ConfigFile, tailwindConfigJS, 'utf8');
+    }
   });
 
   api.addEntryImportsAhead(() => {
-    const { path } = api.userConfig.tailwindcss || {};
+    const { tailwindCssFilePath } = api.userConfig.tailwindcss || {};
     return {
-      source: path || './tailwind.css',
+      source: tailwindCssFilePath || './tailwind.css',
     };
   });
 };

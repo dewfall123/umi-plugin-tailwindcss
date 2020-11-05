@@ -17,56 +17,26 @@ $ yarn add umi-plugin-tailwindcss -D
 ```
 
 ## 配置
-一般来说，不需要修改默认配置就可以使用，在非`local`环境，会启用`purgecss`插件，去除额外的`tailwindcss` 样式。
+
+`tailwindCssFilePath?: string`.
+
+引入的 tailwindcss 文件，可缺省。
 
 ```ts
 // .umirc.ts
-// 默认配置
+// 示例配置
+...
 tailwindcss: {
-    configName: 'tailwind.config.js',
-    path: '', // eg @/assets/tailwind.css
-    purgecssEnable: process.env.UMI_ENV !== 'local',
-    purgecssOptions: {
-        content: ['./src/**/*.html', './src/**/*.ejs', './src/**/*.tsx', './src/**/*.ts'],
-        defaultExtractor: (content: string) =>
-            content.match(/[A-Za-z0-9-_/:]*[A-Za-z0-9-_/]+/g) || [],
-    },
+  tailwindCssFilePath: '@/tailwind.css',
 },
+...
 ```
 
-- **configName**
-  
-    如果你需要自定义tailwind配置文件名，你可以这样设置:
-    ```js
-    tailwindcss: {
-        configName: 'myTailwind.config.js',
-    }
-    ```
-- **path**
-  
-    path默认是空，会在`.umi`里面生成一个`tailwind.css`文件并自动import，内容如下:
-    ```css
-    /* purgecss start ignore */
-    @tailwind base;
+## 说明
 
-    @tailwind components;
-    /* purgecss end ignore */
+此插件会自动完成引入`tailwind`[所需做的事情](https://tailwindcss.com/docs/installation)。
 
-    @tailwind utilities;
-    ```
-
-    如果你需要自定义`tailwind.css`文件的内容（例如[https://www.tailwindcss.cn/docs/adding-base-styles]），你可以设置`path`，值是文件路径。
-    ```js
-    // .umirc.ts
-    tailwindcss: {
-        path: '@/assets/tailwind.css',
-    },
-    ```
-
-- **purgecssEnable**
-  
-    是否开启`purgecss`。默认值是`process.env.UMI_ENV !== 'local'`，这意味着在`local`环境不会开启`purgecss`。也不要在`dev`模式开启这个选项!!! 因为热更新不会重新运行`purgecss`。
-
-- **purgecssOptions**
-
-    详情见 https://www.purgecss.com/configuration#options .
+1. 自动添加`tailwindcss`依赖。
+2. 将 Tailwind 添加到你的 CSS 代码中。如果`tailwindCssFilePath`配置存在，会使用该路径的文件。如果缺少，会创建一份临时文件，并引入该临时文件。
+3. 检查根目录是否存在`tailwind.config.js`配置文件。若缺少，会添加一份配置文件。
+4. 添加 umi 的`postcss`对应的插件。
