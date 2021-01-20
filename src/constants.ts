@@ -8,16 +8,12 @@ export const tailwindcssContent = `/* purgecss start ignore */
 `;
 
 export const tailwindConfigJS = `module.exports = {
-    purge: {
-        mode: 'layers',
-        enabled: process.env.NODE_ENV === 'production',
-        content: ['./src/**/*.html', './src/**/*.tsx', './src/**/*.ts'],
-        options: {
-        whitelist: [],
-        },
-    },
+    purge: ['./src/**/*.html', './src/**/*.tsx', './src/**/*.ts'],
+    darkMode: false, // or 'media' or 'class'
     theme: {},
-    variants: {},
+    variants: {
+      extend: {},
+    },
     plugins: [],
 };
 `;

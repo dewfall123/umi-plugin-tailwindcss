@@ -8,7 +8,7 @@ export default {
     file: 'dist/index.js',
     format: 'cjs',
   },
-  external: ['@fullhuman/postcss-purgecss', 'postcss'],
+  external: ['tailwindcss'],
   plugins: [
     nodeResolve({
       preferBuiltins: true,
