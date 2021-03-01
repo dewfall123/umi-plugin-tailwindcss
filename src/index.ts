@@ -4,6 +4,16 @@ import { dirname, join } from 'path';
 import tailwindcssPlugin from './postcss-plugins/tailwindcss';
 import fs from 'fs';
 
+function getTailwindConfigFilePath(api: IApi) {
+  const { tailwindConfigFilePath } = api.userConfig.tailwindcss || {};
+
+  const configFile =
+    tailwindConfigFilePath ||
+    join(process.env.APP_ROOT || api.cwd, 'tailwind.config.js');
+
+  return configFile;
+}
+
 export default (api: IApi) => {
   api.describe({
     key: 'tailwindcss',
@@ -11,6 +21,7 @@ export default (api: IApi) => {
       schema(joi) {
         return joi.object({
           tailwindCssFilePath: joi.string(),
+          tailwindConfigFilePath: joi.string(),
         });
       },
     },
@@ -18,9 +29,10 @@ export default (api: IApi) => {
 
   // 添加postcss-plugin配置
   api.modifyConfig((config: IConfig) => {
+    const configPath = getTailwindConfigFilePath(api);
     config.extraPostCSSPlugins = [
       ...(config.extraPostCSSPlugins || []),
-      tailwindcssPlugin,
+      tailwindcssPlugin({ config: configPath }),
     ];
 
     return config;
@@ -45,7 +57,7 @@ export default (api: IApi) => {
     }
 
     // 添加tailwind.config.js
-    const ConfigFile = join(api.cwd, 'tailwind.config.js');
+    const ConfigFile = getTailwindConfigFilePath(api);
     if (!fs.existsSync(ConfigFile)) {
       console.log('generate tailwind.config.js.');
       fs.writeFileSync(ConfigFile, tailwindConfigJS, 'utf8');
