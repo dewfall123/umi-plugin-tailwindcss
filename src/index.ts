@@ -30,6 +30,11 @@ export default (api: IApi) => {
   // 添加postcss-plugin配置
   api.modifyConfig((config: IConfig) => {
     const configPath = getTailwindConfigFilePath(api);
+    // fix #8
+    if (!fs.existsSync(configPath)) {
+      console.log('generate tailwind.config.js.');
+      fs.writeFileSync(configPath, tailwindConfigJS, 'utf8');
+    }
     config.extraPostCSSPlugins = [
       ...(config.extraPostCSSPlugins || []),
       tailwindcssPlugin({ config: configPath }),
