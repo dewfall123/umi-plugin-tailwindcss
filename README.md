@@ -30,7 +30,7 @@ tailwind.css file path, can be missing。
 ...
 tailwindcss: {
   tailwindCssFilePath?: '@/tailwind.css',
-  tailwindConfigFilePath?: 'tailwind-custom.config.js' // 默认取值 tailwindConfigFilePath || join(process.env.APP_ROOT || api.cwd, 'tailwind.config.js'),
+  tailwindConfigFilePath?: 'tailwind-custom.config.js' // Default value: tailwindConfigFilePath || join(process.env.APP_ROOT || api.cwd, 'tailwind.config.js'),
 },
 ...
 ```
