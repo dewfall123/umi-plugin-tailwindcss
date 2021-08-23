@@ -39,9 +39,9 @@ tailwindcss: {
 
 This plugin do the [following things](https://tailwindcss.com/docs/installation) to support tailwind in umi。
 
-1. Add `tailwindcss` dependencies auto（defaut to the latest version[@tailwindcss/postcss7-compat](https://tailwindcss.com/docs/installation#post-css-7-compatibility-build)，becouse of umi don't support postcss8 now）。
+1. Add `tailwindcss` dependencies auto（defauts to the latest version[@tailwindcss/postcss7-compat](https://tailwindcss.com/docs/installation#post-css-7-compatibility-build), because of umi doesn't support postcss8 now）。
 
-   You can also install the specific version of tailwindcss. Plugin will use the the `tailwindcss` package in `devDependencies` if exist, else it will use `@tailwindcss/postcss7-compat`。
+   You can also install the specific version of tailwindcss. If `tailwindcss` exist in `devDependencies`, plugin will use it, otherwise plugin will use `@tailwindcss/postcss7-compat`。
 
 2. Add Tailwind to your CSS。If `tailwindCssFilePath` setting exist, plugin will import this css file automatically. If not exist, will create a temporary file, and import it.
 3. If `tailwind.config.js` not exist at `tailwindConfigFilePath`, it will create one。
