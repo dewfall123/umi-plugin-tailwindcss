@@ -1,7 +1,6 @@
 import { IApi, IConfig } from 'umi';
 import { tailwindConfigJS, tailwindcssContent } from './constants';
 import { dirname, join } from 'path';
-import tailwindcssPlugin from './postcss-plugins/tailwindcss';
 import fs from 'fs';
 
 function getTailwindConfigFilePath(api: IApi) {
@@ -35,9 +34,15 @@ export default (api: IApi) => {
       console.log('generate tailwind.config.js.');
       fs.writeFileSync(configPath, tailwindConfigJS, 'utf8');
     }
+    // 优先使用tailwindcss 如果不存在，使用@tailwindcss/postcss7-compat
+    const tailwindcssPackageName =
+      api.pkg.devDependencies && api.pkg.devDependencies.tailwindcss
+        ? 'tailwindcss'
+        : '@tailwindcss/postcss7-compat';
+
     config.extraPostCSSPlugins = [
       ...(config.extraPostCSSPlugins || []),
-      tailwindcssPlugin({ config: configPath }),
+      require(tailwindcssPackageName)({ config: configPath }),
     ];
 
     return config;
@@ -46,8 +51,10 @@ export default (api: IApi) => {
   // 添加依赖
   api.addProjectFirstLibraries(() => [
     {
-      name: 'tailwindcss',
-      path: dirname(require.resolve('tailwindcss/package.json')),
+      name: '@tailwindcss/postcss7-compat',
+      path: dirname(
+        require.resolve('@tailwindcss/postcss7-compat/package.json'),
+      ),
     },
   ]);
 

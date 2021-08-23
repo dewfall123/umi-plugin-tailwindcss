@@ -1,12 +1,12 @@
 {
   "name": "umi-plugin-tailwindcss",
-  "version": "3.0.4",
+  "version": "3.1.4",
   "description": "umi@3.0 plugin for tailwindcss",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup --config",
-    "pre-public": "yarn build && npm version patch"
+    "pre-publish": "yarn build && npm version patch"
   },
   "files": [
     "dist"
@@ -34,7 +34,7 @@
     "access": "public"
   },
   "dependencies": {
-    "tailwindcss": "2.0.1-compat"
+    "@tailwindcss/postcss7-compat": "latest"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^7.1.1",
