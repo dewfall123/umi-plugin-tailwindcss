@@ -40,9 +40,12 @@ export default (api: IApi) => {
         ? 'tailwindcss'
         : '@tailwindcss/postcss7-compat';
 
+    const autoprefixerOptions = api.userConfig.autoprefixer;
+
     config.extraPostCSSPlugins = [
       ...(config.extraPostCSSPlugins || []),
       require(tailwindcssPackageName)({ config: configPath }),
+      require('autoprefixer')(autoprefixerOptions),
     ];
 
     return config;
