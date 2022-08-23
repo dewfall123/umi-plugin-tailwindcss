@@ -34,11 +34,8 @@ export default (api: IApi) => {
       console.log('generate tailwind.config.js.');
       fs.writeFileSync(configPath, tailwindConfigJS, 'utf8');
     }
-    // 优先使用tailwindcss 如果不存在，使用@tailwindcss/postcss7-compat
-    const tailwindcssPackageName =
-      api.pkg.devDependencies && api.pkg.devDependencies.tailwindcss
-        ? 'tailwindcss'
-        : '@tailwindcss/postcss7-compat';
+
+    const tailwindcssPackageName = 'tailwindcss';
 
     const autoprefixerOptions = api.userConfig.autoprefixer;
 
@@ -54,10 +51,8 @@ export default (api: IApi) => {
   // 添加依赖
   api.addProjectFirstLibraries(() => [
     {
-      name: '@tailwindcss/postcss7-compat',
-      path: dirname(
-        require.resolve('@tailwindcss/postcss7-compat/package.json'),
-      ),
+      name: 'tailwindcss',
+      path: dirname(require.resolve('tailwindcss')),
     },
   ]);
 
